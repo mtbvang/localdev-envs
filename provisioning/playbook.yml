@@ -6,6 +6,12 @@
   pre_tasks:
   - name: Gathering facts
     setup: null
+  - name: add sourcing of bashrc to login file
+    lineinfile:
+      line: "source ~/.bashrc"
+      path: "{{ ansible_user_dir}}/.bash_profile"
+      create: true
+      state: present
   roles:
   - role: python3
     python3_pyenv: "3.7.2"
@@ -25,6 +31,7 @@
       state: present
     with_items:
       - vim
+      - bash-completion
     when: ansible_os_family == 'Debian'
   - name: install system packages for RedHat
     become: true
@@ -40,10 +47,5 @@
       - bash-completion
       - bash-completion-extras
     when: ansible_os_family == 'RedHat'
-  - name: update login file
-    blockinfile:
-      path: "{{ ansible_user_dir}}/.bash_profile"
-      create: true
-      block: |
-        source ~/.bashrc
+
   environment:

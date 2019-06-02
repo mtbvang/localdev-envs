@@ -40,10 +40,10 @@
       - bash-completion
       - bash-completion-extras
     when: ansible_os_family == 'RedHat'
-  - name: update login file
-    blockinfile:
+  - name: add sourcing of bashrc to login file
+    lineinfile:
+      line: "source ~/.bashrc"
       path: "{{ ansible_user_dir}}/.bash_profile"
       create: true
-      block: |
-        source ~/.bashrc
+      state: present
   environment:

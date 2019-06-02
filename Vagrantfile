@@ -25,5 +25,10 @@ Vagrant.configure("2") do |config|
     ansible.galaxy_command = "ansible-galaxy install --ignore-certs --role-file=%{role_file} --roles-path=%{roles_path} #{ANSIBLE_GALAXY_FORCE}"
     ansible.become = true
   end
+  
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.proxy.enabled = { svn: false, docker: false }
+  end
 
+  
 end

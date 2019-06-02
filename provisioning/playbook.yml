@@ -6,8 +6,44 @@
   pre_tasks:
   - name: Gathering facts
     setup: null
-  tasks:
   roles:
   - role: python3
     python3_pyenv: "3.7.2"
+  tasks:
+  - name: Set bashrc file
+    copy:
+      src: files/bashrc
+      dest: /home/vagrant/.bashrc
+      owner: vagrant
+      group: vagrant    
+      mode: 0544
+  - name: install debian system packages
+    become: true
+    become_user: root
+    apt:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - vim
+    when: ansible_os_family == 'Debian'
+  - name: install system packages for RedHat
+    become: true
+    become_user: root
+    yum:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - vim-X11 
+      - vim-common 
+      - vim-enhanced 
+      - vim-minimal
+      - bash-completion
+      - bash-completion-extras
+    when: ansible_os_family == 'RedHat'
+  - name: update login file
+    blockinfile:
+      path: "{{ ansible_user_dir}}/.bash_profile"
+      create: true
+      block: |
+        source ~/.bashrc
   environment:

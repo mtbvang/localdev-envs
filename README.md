@@ -1,9 +1,3 @@
 # localdev-envs
 
-Repository for creating vagrant based localdev setups for various different language stacks by adding this repo as a git submodule and then checking out the relevant branch.
-
-Look at the branches to see the list of development stacks supported.
-
-Branch naming convention: <vagrant provider>-<language stack> e.g. docker-python for a docker based python development environment.
-
-These aren't seperated into their own repos because they won't besetup with CI so we can get the benefit of a centralized repo.
+A vagrant controlled virtualbox VM with Ubuntu 18.04 provisioned with Python 3 and tools with the Ansible role https://github.com/mtbvang/ansible-python3-role.

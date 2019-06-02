@@ -4,23 +4,13 @@
 PROJECT_NAME = ENV['PROJECT_NAME'] || File.basename(File.expand_path(File.dirname(__FILE__)))
 ANSIBLE_VERSION = ENV['ANSIBLE_VERSION'] || '2.5.4'
 ANSIBLE_GALAXY_FORCE = ENV['ANSIBLE_GALAXY_FORCE'] || "--force"
-VB_GUEST = ENV['VB_GUEST'] == 'true' ? true : false
-SSH_USERNAME = ENV['SSH_USERNAME'] || 'vagrant'
 IP_BASE = 10
+VB_GUEST = ENV['VB_GUEST'] == 'true' ? true : false
 
 Vagrant.configure(2) do |config|
 
   # The admin VM that is seperate from the kubernetes VMs and contains the development tools.
   config.vm.define "localdev" do |vms|
-    #      All this to get the ssh username to set in the config.j2 template that goes to ~/.ssh/config. FIXNME glob path is hardcoded to centos/virtualbox
-    if (Dir.glob("#{File.dirname(__FILE__)}/.vagrant/machines/centos/virtualbox/*").empty? ||
-    ARGV[1] == '--provision' ||
-    (ARGV[1] == '--provision-with' && ARGV[2] == 'ansible')) &&
-    (SSH_USERNAME.nil? || SSH_USERNAME.empty? || SSH_USERNAME == 'null') && (ARGV[0] == 'up' || ARGV[0] == 'provision')
-      print "Enter your ssh username: \n"
-      SSH_USERNAME = STDIN.gets.chomp
-      print "\n"
-    end
     
     #vms.vm.box = "boxcutter/ubuntu1804-desktop"
     vms.vm.box = "juguerre/ubuntu-desktop-18.04"
@@ -47,9 +37,6 @@ Vagrant.configure(2) do |config|
       ansible.install_mode = "pip"
       ansible.version = ANSIBLE_VERSION
       ansible.playbook = "/vagrant/#{PROJECT_NAME}/provisioning/playbook.yml"
-      ansible.extra_vars = {
-        sshUser: SSH_USERNAME
-      }
       ansible.galaxy_role_file = "/vagrant/#{PROJECT_NAME}/provisioning/requirements.yml"
       ansible.galaxy_roles_path = "/vagrant/#{PROJECT_NAME}/provisioning/.roles"
       ansible.galaxy_command = "ansible-galaxy install --ignore-certs --role-file=%{role_file} --roles-path=%{roles_path} #{ANSIBLE_GALAXY_FORCE}"

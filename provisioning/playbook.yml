@@ -1,0 +1,13 @@
+- name: Provision dev environment
+  become: yes
+  become_user: vagrant
+  hosts:
+  - all
+  pre_tasks:
+  - name: Gathering facts
+    setup: null
+  tasks:
+  roles:
+  - role: python3
+    python3_pyenv: "3.7.2"
+  environment:

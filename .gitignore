@@ -1,0 +1,7 @@
+/.project
+/.gradle/
+/.vagrant/
+/build/
+/.venv/
+/.pydevproject
+/roles/

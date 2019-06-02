@@ -1,0 +1,4 @@
+---
+- src: https://github.com/mtbvang/ansible-python3-role
+  name: python3
+  version: 'v0.1.6'
